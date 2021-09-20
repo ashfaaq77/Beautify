@@ -1,0 +1,16 @@
+{
+    "development": {
+        "username": "root",
+        "password": "toor",
+        "database": "beautyfy",
+        "host": "localhost",
+        "dialect": "mysql"
+    },
+    "production": {
+        "username": "root",
+        "password": "toor",
+        "database": "beautyfy",
+        "host": "localhost",
+        "dialect": "mysql"
+    }
+}

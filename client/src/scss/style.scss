@@ -1,0 +1,169 @@
+// If you want to override variables do it here
+@import "variables";
+
+// Import CoreUI styles
+@import "~@coreui/coreui/scss/coreui.scss";
+
+// Some temp fixes
+@import "fixes";
+
+// If you want to add something do it here
+@import "custom";
+
+.c-header {
+    justify-content: space-between;
+}
+
+.c-header-nav {
+    width: 250px;
+}
+
+.c-header-nav-items.dropdown .dropdown-menu {
+    transform: translate3d(0px, 57px, 0px) !important;
+}
+
+.attributes-wrapper li {
+    display: flex;
+}
+
+.attributes-wrapper li p{
+    width: 20%;
+    margin-bottom: 0 !important;
+}
+
+.attributes-wrapper li select{
+    width: 70%;
+}
+
+.attributes-wrapper li input {
+    width: 70%;
+}
+
+
+.attributes-wrapper li button{
+    width: 20%;
+}
+
+#comment_box .inside {
+    width: 100%;
+    padding: 0 !important;
+}
+.chat-box{
+    background: white;
+    width: 100%;
+    border-radius: 5px 5px 0px 0px;
+    height: 350px;
+}
+.chat-head{
+    width: 100%;
+    height: 45px;
+    background: #2c3e50;
+    border-radius: 5px 5px 0px 0px;
+}
+.chat-head h2{
+    color: white;
+    padding: 8px;
+    display: inline-block;
+}
+.chat-head img{
+    cursor: pointer;
+    float: right;
+    width: 25px;
+    margin: 10px;
+}
+.chat-body{
+    height: 300px;
+    width: 100%;
+    overflow: auto;
+    margin-bottom: 45px;
+}
+.chat-text{
+    bottom: 0px;
+    height: 45px;
+    position: absolute;
+    display: flex;
+}
+.chat-text textarea{
+    width: inherit;
+    height: inherit;
+    box-sizing: border-box;
+    border: 1px solid #bdc3c7;
+    padding: 10px;
+    resize: none;
+}
+.chat-text textarea:active, .chat-text textarea:focus, .chat-text textarea:hover{
+    border-color: royalblue;
+}
+.msg-send{
+    background: #2ecc71;
+}
+.msg-send{
+    width: 200px;
+    height: 35px;
+    padding: 5px 5px 5px 10px;
+    margin: 2px 15px;
+    float: right;
+    border-radius: 3px;
+    line-height: 30px;
+    position: relative;
+    color: white;
+}
+.msg-receive {
+    width: 100%;
+    padding: 5px 5px 5px 10px;
+    // margin: 2px 15px;
+    float: left;
+    border-radius: 3px;
+    line-height: 18px;
+    position: relative;
+    color: white;
+    margin-top: 10px;
+}
+.msg-receive {
+    background: #3498db;
+}
+.msg-receive.administrator {
+    background: #3b8066;
+}
+.msg-receive.recruitment_agent {
+    background: #ac7d4c;
+}
+.msg-receive.industry_specialist {
+    background: #845788;
+}
+.msg-receive.employer {
+    background: #c84e4e;
+}
+.msg-send:after{
+    content: '';
+    width: 0px;
+    height: 0px;
+    position: absolute;
+    border: 15px solid;
+    border-color: transparent transparent transparent #2ecc71;
+    right: -29px;
+    top: 7px;
+}
+.msg-receive:hover, .msg-send:hover{
+    opacity: .9;
+}
+.chat-text .dashicons.dashicons-editor-break {
+    position: absolute;
+    font-size: 26px;
+    right: 13px;
+    top: 12px;
+}
+.wrapper-chat {
+    position: relative;
+}
+.chat-text svg {
+    font-size: 25px;
+    position: absolute;
+    right: 7px;
+    top: 10px;
+}
+.commentator-name {
+    float: right;
+    font-size: 9px;
+    color: black;
+}
