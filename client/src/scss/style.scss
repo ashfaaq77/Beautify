@@ -167,3 +167,19 @@
     font-size: 9px;
     color: black;
 }
+
+.productOptions > div {
+    width: 100%;
+}
+
+.image-delete {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.image-delete svg {
+    font-size: 30px;   
+}
+.each-slide {
+    position: relative;
+}

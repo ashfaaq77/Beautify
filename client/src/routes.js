@@ -16,6 +16,7 @@ const Product = React.lazy(() => import('./views/products/Product'));
 const Products = React.lazy(() => import('./views/products/Products'));
 
 const Order = React.lazy(() => import('./views/orders/Order'));
+const Orders = React.lazy(() => import('./views/orders/Orders'));
 
 
 const adminRoutes = [
@@ -34,6 +35,8 @@ const adminRoutes = [
   { path: '/admin/products/:id', exact: true, name: 'Product', component: Product },
   { path: '/admin/products/', exact: true, name: 'Products', component: Products },
   { path: '/admin/orders/new', exact: true, name: 'Order', component: Order },
+  { path: '/admin/orders/:id', exact: true, name: 'Order', component: Order },
+  { path: '/admin/orders/', exact: true, name: 'Orders', component: Orders },
 ];
 
 

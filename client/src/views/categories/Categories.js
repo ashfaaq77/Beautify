@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import axios from "axios";
 
+import serverRoutes from "../../points";
+import createServerUrl from "../../inc/functions";
+
 import {
     CCard,
     CCardBody,
@@ -23,7 +26,8 @@ const Categories = () => {
 
     async function getAttributes(page) {
         try {
-            const url = "http://localhost:5000/categories/";
+
+            const url = createServerUrl(serverRoutes.categories);
 
             await axios.get(url, {
                 page: page
@@ -80,7 +84,7 @@ const Categories = () => {
                             scopedSlots={{
                                 'actions':
                                     (item) => {
-                                        const href = `http://localhost:3000/admin/categories/${item.id}`;
+                                        const href = process.env.REACT_APP_PUBLIC_URL + `/admin/categories/${item.id}`;
                                         return (
                                             <td>
                                                 <CButton size="sm" color="success">

@@ -3,6 +3,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../../../context/AuthContext";
 
+import serverRoutes from "../../../points";
+import createServerUrl from "../../../inc/functions";
+
 import {
   CButton,
   CCard,
@@ -75,7 +78,7 @@ const Register = () => {
       last_name: last_name,
     };
 
-    const url = "http://localhost:5000/auth";
+    const url = createServerUrl(serverRoutes.register);
 
     axios.post(url, data).then((res) => {
       if (res.data.error) {

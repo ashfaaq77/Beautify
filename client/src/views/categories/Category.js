@@ -4,6 +4,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 // import AuthContext from "../../context/AuthContext";
 
+import serverRoutes from "../../points";
+import createServerUrl from "../../inc/functions";
+
 import {
     CButton,
     CCard,
@@ -32,7 +35,8 @@ const Category = ({ match }) => {
 
 
     function getParentList() {
-        const categoriesUrl = "http://localhost:5000/categories/";
+        const categoriesUrl = createServerUrl(serverRoutes.categories);
+
         try {
             axios.get(categoriesUrl).then((res) => {
                 if (res.data) {
@@ -41,7 +45,7 @@ const Category = ({ match }) => {
                     ];
 
                     const data = res.data.map((i) => {
-                        if (match.params.id > 0 && i.id != match.params.id) {
+                        if (i.id != match.params.id) {
                             return (<option key={i.id} value={i.id}>{i.name}</option>)
                         }
                     });
@@ -55,7 +59,8 @@ const Category = ({ match }) => {
     }
 
     function getCategory(id) {
-        const categoryUrl = "http://localhost:5000/categories/" + id;
+        const categoryUrl = createServerUrl(serverRoutes.categories, id);
+
         try {
             axios.get(categoryUrl).then((res) => {
                 if (res.data.category) {
@@ -94,7 +99,14 @@ const Category = ({ match }) => {
     const updateAttributes = (e) => {
         e.preventDefault();
 
-        const url = "http://localhost:5000/categories/" + match.params.id;
+
+        var iD = match.params.id;
+        console.log(iD);
+        if (iD == undefined) {
+            iD = 0;
+        }
+
+        const url = createServerUrl(serverRoutes.categories, iD);
 
         axios.post(url, {
             name: name,

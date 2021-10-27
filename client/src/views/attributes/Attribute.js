@@ -4,6 +4,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 // import AuthContext from "../../context/AuthContext";
 
+import serverRoutes from "../../points";
+import createServerUrl from "../../inc/functions";
+
 import {
     CButton,
     CCard,
@@ -31,7 +34,8 @@ const Attribute = ({ match }) => {
     const [type, setType] = useState("dropdown");
 
     function getAttribute(id) {
-        const attributeUrl = "http://localhost:5000/attributes/" + id;
+        const attributeUrl = createServerUrl(serverRoutes.attributes, id);
+
         try {
             axios.get(attributeUrl).then((res) => {
                 if (res.data.attribute) {
@@ -77,7 +81,13 @@ const Attribute = ({ match }) => {
     const updateAttributes = (e) => {
         e.preventDefault();
 
-        const url = "http://localhost:5000/attributes/" + match.params.id;
+        var iD = match.params.id;
+        if (match.params.id == undefined) {
+            iD = 0;
+        }
+
+
+        const url = createServerUrl(serverRoutes.attributes, iD);
 
         axios.post(url, {
             name: name,

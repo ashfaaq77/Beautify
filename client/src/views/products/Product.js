@@ -1,8 +1,12 @@
 import React, { useState, useContext, useEffect, useRef } from 'react';
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-// import AuthContext from "../../context/AuthContext";
 import Walker from "../../inc/Walker";
+import SingleUpload from "../upload/SingleUpload";
+import MultiUpload from "../upload/MultiUpload";
+
+import serverRoutes from "../../points";
+import createServerUrl from "../../inc/functions";
 
 import {
     CButton,
@@ -20,6 +24,7 @@ import {
     CFormGroup,
     CTextarea,
     CLabel,
+    CInputFile
 } from '@coreui/react';
 
 import {
@@ -29,6 +34,7 @@ import {
 const Product = ({ match }) => {
 
     const [title, setTitle] = useState(match.params.id);
+
     const [errormsg, setErrormsg] = useState("");
     const [successmsg, setSuccessmsg] = useState("");
 
@@ -61,10 +67,10 @@ const Product = ({ match }) => {
     let selectedAttributesArray = {};
 
     function getProduct(id) {
-        const productUrl = "http://localhost:5000/products/" + id;
+        const productUrl = createServerUrl(serverRoutes.products, id);
+
         try {
             axios.get(productUrl).then((res) => {
-                console.log(res);
                 setCurrentProducts(res.data);
                 setProductTitle(res.data.title);
                 setProductDescription(res.data.description);
@@ -85,12 +91,16 @@ const Product = ({ match }) => {
                 }
 
                 if (res.data.quantity) {
-                    setQuatity(1);
+                    setQuatity(res.data.quantity);
                 } else {
                     setQuatity(0);
                 }
 
-                setPreOrders(res.data.pre_orders);
+                if (res.data.pre_orders) {
+                    setPreOrders(1);
+                } else {
+                    setPreOrders(0);
+                }
 
                 if (Object.keys(res.data.ProductCategories).length > 0) {
                     let selectedCat = [];
@@ -129,7 +139,7 @@ const Product = ({ match }) => {
     //Getter
     function getCategories() {
         try {
-            const url = "http://localhost:5000/categories/";
+            const url = createServerUrl(serverRoutes.categories);
 
             axios.get(url).then((res) => {
                 if (res.data.length > 0) {
@@ -143,7 +153,7 @@ const Product = ({ match }) => {
 
     function getAttributes(attributesS = {}) {
         try {
-            const url = "http://localhost:5000/attributes/";
+            const url = createServerUrl(serverRoutes.attributes);
 
             axios.get(url).then((res) => {
                 setAttributesArray(res.data);
@@ -368,6 +378,11 @@ const Product = ({ match }) => {
             }
         })
 
+        var pO = preOrders;
+        if (!(pO == 0 || pO == 1)) {
+            pO = 0;
+        }
+
         const data = {
             'title': productTitle,
             'description': productDescription,
@@ -377,16 +392,26 @@ const Product = ({ match }) => {
             'taxable': parseInt(taxable),
             'stock': parseInt(stock),
             'quantity': parseInt(quantity),
-            'pre_orders': parseInt(preOrders),
+            'pre_orders': parseInt(pO),
             'attributes': attributesSelectedFinal,
             'categories': categoriesArray
         }
 
-        const url = "http://localhost:5000/products/" + match.params.id;
+        const url = createServerUrl(serverRoutes.products, match.params.id);
 
         axios.post(url, data).then((res) => {
-            console.log(res);
-
+            console.log(res.data);
+            if (res.data.message != undefined && res.data.message == 'success') {
+                if (match.params.id == undefined) {
+                    history.push("/admin/products/" + res.data.product);
+                } else {
+                    alert('saved');
+                }
+            } else if (res.data.message != undefined) {
+                alert(res.data.message);
+            } else if (Array.isArray(res.data)) {
+                res.data.forEach((i) => alert(i));
+            }
         });
     }
 
@@ -550,6 +575,26 @@ const Product = ({ match }) => {
                     </CCardBody>
                 </CCard>
             </CCol>
+            {match.params.id > 0 &&
+                (
+                    <CCol lg={6}>
+                        <CCard>
+                            <CCardBody>
+                                <CFormGroup>
+                                    <SingleUpload productId={match.params.id}></SingleUpload>
+                                </CFormGroup>
+                            </CCardBody>
+                        </CCard>
+                        <CCard>
+                            <CCardBody>
+                                <CFormGroup>
+                                    <MultiUpload productId={match.params.id}></MultiUpload>
+                                </CFormGroup>
+                            </CCardBody>
+                        </CCard>
+                    </CCol>
+                )
+            }
         </CRow >
     )
 }

@@ -4,6 +4,9 @@ import { useHistory } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import AuthContext from "../../../context/AuthContext";
 
+import serverRoutes from "../../../points";
+import createServerUrl from "../../../inc/functions";
+
 import {
     CButton,
     CCard,
@@ -64,7 +67,7 @@ function Login(props) {
         e.preventDefault();
         const data = { email: email, password: password };
 
-        const url = "http://localhost:5000/auth/login";
+        const url = createServerUrl(serverRoutes.login);
 
         try {
             await axios.post(url, data).then(async (res) => {

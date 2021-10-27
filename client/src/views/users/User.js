@@ -4,6 +4,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 // import AuthContext from "../../context/AuthContext";
 
+import serverRoutes from "../../points";
+import createServerUrl from "../../inc/functions";
+
 import {
     CButton,
     CCard,
@@ -33,7 +36,8 @@ const User = ({ match }) => {
     const [passwordnew, setpasswordNew] = useState("");
 
     function getUser(id) {
-        const userUrl = "http://localhost:5000/auth/user/" + id;
+        const userUrl = createServerUrl(serverRoutes.authUser, id);
+
         try {
             axios.get(userUrl).then((res) => {
                 setEmail(res.data.email);
@@ -97,7 +101,7 @@ const User = ({ match }) => {
 
         if (match.params.id > 0) {
             //update user
-            const url = "http://localhost:5000/auth/user/details";
+            const url = createServerUrl(serverRoutes.authUser, "details");
 
             axios.post(url, {
                 email: email,
@@ -109,7 +113,8 @@ const User = ({ match }) => {
                     setSuccessmsg("");
                     console.log(errormsg);
                 } else if (res.data.user) {
-                    const roleUrl = "http://localhost:5000/auth/user/role";
+                    const roleUrl = createServerUrl(serverRoutes.authUser, "role");
+
                     axios.post(roleUrl, {
                         role: role,
                         userid: match.params.id
@@ -119,7 +124,8 @@ const User = ({ match }) => {
                             setSuccessmsg("");
                         } else if (res.data.user) {
                             if (passwordnew != "") {
-                                const passwordUrl = "http://localhost:5000/auth/user/" + match.params.id + "/password";
+                                const passwordUrl = createServerUrl(serverRoutes.authUser, match.params.id + "/password");
+
                                 axios.post(passwordUrl, {
                                     password: passwordnew,
                                     passwordVerify: repeatpassword
@@ -156,7 +162,7 @@ const User = ({ match }) => {
             });
         } else {
             //create a new user
-            const url = "http://localhost:5000/auth/";
+            const url = createServerUrl(serverRoutes.register);
 
             axios.post(url, {
                 email: email,
@@ -170,7 +176,8 @@ const User = ({ match }) => {
                     setErrormsg(res.data.error);
                     console.log(errormsg);
                 } else if (res.data.user) {
-                    const roleUrl = "http://localhost:5000/auth/user/role";
+                    const roleUrl = createServerUrl(serverRoutes.authUser, "role");
+
                     axios.post(roleUrl, {
                         role: role,
                         userid: res.data.user
@@ -179,12 +186,15 @@ const User = ({ match }) => {
                             setErrormsg(res.data.error);
                         } else if (res.data.user) {
                             console.log(res);
-                            history.push(`http://localhost:3000/admin/users/${res.data.user}`);
+                            history.push(`/admin/users/${res.data.user}`);
                         } else {
                             setErrormsg(res.data.join(' , '));
                             setSuccessmsg("");
                         }
                     })
+                } else if (Array.isArray(res.data)) {
+                    setErrormsg(res.data.join(' , '));
+                    setSuccessmsg("");
                 }
             });
         }

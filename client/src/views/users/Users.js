@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import axios from "axios";
+import serverRoutes from "../../points";
+import createServerUrl from "../../inc/functions";
 
 import {
   CCard,
@@ -38,7 +40,7 @@ const Users = () => {
 
   async function getUsers(page) {
     try {
-      const url = "http://localhost:5000/auth/user/all";
+      const url = createServerUrl(serverRoutes.authUser, "all");
 
       await axios.get(url, {
         page: page
@@ -86,7 +88,7 @@ const Users = () => {
               scopedSlots={{
                 'actions':
                   (item) => {
-                    const href = `http://localhost:3000/admin/users/${item.id}`;
+                    const href = process.env.REACT_APP_PUBLIC_URL + `/admin/users/${item.id}`;
                     return (
                       <td>
                         <CButton size="sm" color="success">

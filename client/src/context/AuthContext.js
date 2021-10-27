@@ -1,17 +1,23 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
+import serverRoutes from "../points";
+import createServerUrl from "../inc/functions";
+
 const AuthContext = createContext("");
 
 function AuthContextProvider(props) {
-    console.log(props);
+
     const [loggedIn, setLoggedIn] = useState(undefined);
 
     async function getLoggedIn() {
-        const url = "http://localhost:5000/auth/loggedIn";
+        const url = createServerUrl(serverRoutes.loggedIn);
 
         try {
             const loggedInRes = await axios.get(url);
+            // if (loggedInRes.data === false) {
+            //     window.location.href = 'ttp://localhost:3000/login';
+            // }
             setLoggedIn(loggedInRes.data);
         } catch (e) {
             console.log(e);
