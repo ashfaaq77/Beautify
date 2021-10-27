@@ -9,10 +9,6 @@ module.exports = (sequelize, DataTypes) => {
         notes: {
             type: DataTypes.STRING,
             allowNull: false,
-        },
-        user: {
-            type: DataTypes.BIGINT,
-            allowNull: false
         }
     });
 

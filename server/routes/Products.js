@@ -1,14 +1,115 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { Products, ProductAttributes, ProductCategories } = require("../models");
+const { Products, ProductAttributes, ProductCategories, ProductImages } = require("../models");
 const { auth } = require("../middlewares/Auth");
 
 const { validateProduct } = require("../validation/ProductsValidation");
 
+const upload = require("../config/multer");
 
 const router = express.Router();
 
+
+router.post('/:id/uploadImageFeatured', auth, upload.single('image'), async (req, res) => {
+
+    await ProductImages.destroy({
+        where: {
+            ProductId: req.params.id,
+            featured: 1
+        }
+    });
+
+    //delete images
+
+    const image = new ProductImages({
+        originalname: req.file.originalname,
+        name: req.file.filename,
+        type: req.file.mimetype,
+        destination: req.file.path,
+        size: req.file.size,
+        featured: 1,
+        ProductId: req.params.id
+    });
+
+    const savedImage = await image.save();
+
+    return res
+        .status(200)
+        .json({
+            'success': true,
+            'imageId': savedImage.id
+        });
+    // res.send(req.file)
+
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+});
+
+router.post('/:id/uploadImageGallery', auth, upload.single('image'), async (req, res) => {
+
+    // await ProductImages.destroy({
+    //     where: {
+    //         ProductId: req.params.id,
+    //         featured: 0
+    //     }
+    // });
+
+    //delete images
+    const image = new ProductImages({
+        originalname: req.file.originalname,
+        name: req.file.filename,
+        type: req.file.mimetype,
+        destination: req.file.path,
+        size: req.file.size,
+        featured: 0,
+        ProductId: req.params.id
+    });
+
+    const savedImage = await image.save();
+
+    return res
+        .status(200)
+        .json({
+            'success': true,
+            'imageId': savedImage.id
+        });
+    // res.send(req.file)
+
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+});
+
+router.get('/:id/getGallery', auth, async (req, res) => {
+
+    //delete images
+    const images = await ProductImages.findAll({
+        where: {
+            ProductId: req.params.id,
+            featured: 0
+        },
+        attributes: ['id'],
+    });
+
+    return res
+        .status(200)
+        .json({
+            'success': true,
+            'images': images
+        });
+    // res.send(req.file)
+
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+});
+
+router.post('/:id/uploadImages', auth, upload.array('images', 10), async (req, res) => {
+    console.log(req);
+
+    res.send(req.file)
+}, (error, req, res, next) => {
+    res.status(400).send({ error: error.message })
+});
 
 router.post('/:id', auth, async (req, res) => {
 
@@ -130,16 +231,19 @@ router.post('/:id', auth, async (req, res) => {
 });
 
 
+
 router.get('/', auth, async (req, res) => {
     try {
         const products = await Products.findAll({
-            attributes: ['id', 'title', 'sku', 'regular_price', 'sale_price']
+            // attributes: ['id', 'title', 'sku', 'regular_price', 'sale_price'],
+            include: [ProductAttributes, ProductCategories],
         })
         res.json(products);
     } catch (err) {
         res.status(500).send();
     }
 });
+
 
 router.get('/:id', auth, async (req, res) => {
     try {
@@ -156,8 +260,18 @@ router.get('/:id', auth, async (req, res) => {
     }
 });
 
-
+// router.get('/attributes', auth, async (req, res) => {
+//     try {
+//         const attributes = await ProductAttributes.findAll({
+//             attributes: ['id', 'name', 'values'],
+//         })
+//         res.json(attributes);
+//     } catch (err) {
+//         res.status(500).send();
+//     }
+// });
 
 module.exports = router;
+
 
 

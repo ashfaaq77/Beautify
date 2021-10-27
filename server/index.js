@@ -13,6 +13,7 @@ const SERVERNAME = process.env.SERVERNAME || "localhost";
 const PROTOCOL = process.env.PROTOCOL || "http";
 
 app.use(express.json());
+
 app.use(cookieParser());
 app.use(
     cors({
@@ -36,6 +37,10 @@ const productsRouter = require("./routes/Products");
 app.use("/products", productsRouter);
 const customerRouter = require("./routes/Customers");
 app.use("/customers", customerRouter);
+const orderRouter = require("./routes/Orders");
+app.use("/orders", orderRouter);
+const publicRouter = require("./routes/Uploads");
+app.use("/public", publicRouter);
 
 const db = require("./models");
 

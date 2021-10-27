@@ -14,9 +14,17 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        user: {
-            type: DataTypes.BIGINT,
+        item_qty: {
+            type: DataTypes.INTEGER,
             allowNull: false
+        },
+        item_cost: {
+            type: DataTypes.DECIMAL,
+            allowNull: false
+        },
+        item_attributes: {
+            type: DataTypes.JSON,
+            allowNull: true
         }
     });
 

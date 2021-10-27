@@ -13,7 +13,11 @@ module.exports = (sequelize, DataTypes) => {
         user: {
             type: DataTypes.BIGINT,
             allowNull: false
-        }
+        },
+        created_at: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
     });
 
     Orders.associate = (models) => {

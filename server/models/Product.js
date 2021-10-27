@@ -62,6 +62,10 @@ module.exports = (sequelize, DataTypes) => {
         Products.hasMany(models.ProductReviews, {
             onDelete: "cascade",
         });
+
+        Products.hasMany(models.ProductImages, {
+            onDelete: "cascade",
+        });
     };
 
     return Products;
